@@ -549,7 +549,7 @@ export default class Esxi extends EventEmitter {
     }
   }
 
-  async spawnNbdKitProcess(vmId, diskPath, { singleLink = false, threads = 5, compression = 'fastlz' } = {}) {
+  async spawnNbdKitProcess(vmId, diskPath, { singleLink = false, threads = 6, compression = 'fastlz' } = {}) {
     const key = `${vmId}/${diskPath}/${singleLink}`
     if (!this.#nbdServers.has(key)) {
       const thumbprint = await this.#getServerThumbprint()
