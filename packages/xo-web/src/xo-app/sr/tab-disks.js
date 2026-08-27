@@ -416,11 +416,12 @@ export default class SrDisks extends Component {
   _getVdisByBaseCopy = createSelector(
     () => this.props.vdis,
     () => this.props.unmanagedVdis,
-    (vdis, unmanagedVdis) => {
+    () => this.props.vdiSnapshots,
+    (vdis, unmanagedVdis, vdiSnapshots) => {
       const vdisByBaseCopy = {}
 
       vdis.forEach(vdi => {
-        let baseCopy = unmanagedVdis[vdi.parent]
+        let baseCopy = concat(vdiSnapshots, unmanagedVdis)[vdi.parent]
 
         while (baseCopy !== undefined) {
           const baseCopyId = baseCopy.id
@@ -429,7 +430,7 @@ export default class SrDisks extends Component {
             vdisByBaseCopy[baseCopyId] = []
           }
           vdisByBaseCopy[baseCopyId].push(vdi)
-          baseCopy = unmanagedVdis[baseCopy.parent]
+          baseCopy = concat(vdiSnapshots, unmanagedVdis)[baseCopy.parent]
         }
       })
       return vdisByBaseCopy
