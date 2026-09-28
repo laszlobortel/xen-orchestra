@@ -661,7 +661,7 @@ async function call(args) {
         const length = file === '-' ? undefined : (await stat(file)).size
         // const input = pipeline(file === '-' ? process.stdin : createReadStream(file), streamStatsPrinter(length), noop)
         const source = file === '-' ? process.stdin : createReadStream(file)
-        const input = source.pipe(streamStatsPrinter(length))
+        const input = source.pipe(new PassThrough())
         const response = await fetch(url, {
           dispatcher,
           body: input,
