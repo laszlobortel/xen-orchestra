@@ -2,7 +2,7 @@
 
 import { Agent } from 'undici'
 import { createReadStream, createWriteStream, readFileSync } from 'fs'
-import { PassThrough, pipeline, Readable } from 'stream'
+import { PassThrough, pipeline, Readable, Transform } from 'stream'
 import { stat } from 'fs/promises'
 import chalk from 'chalk'
 import forEach from 'lodash/forEach.js'
@@ -17,7 +17,6 @@ import pairs from 'lodash/toPairs.js'
 import pick from 'lodash/pick.js'
 import pw from 'pw'
 import XoLib from 'xo-lib'
-import { PassThrough, pipeline, Readable, Transform } from 'stream'
 
 // -------------------------------------------------------------------
 
