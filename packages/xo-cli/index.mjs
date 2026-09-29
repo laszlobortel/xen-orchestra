@@ -686,7 +686,7 @@ const source = file === '-' ? process.stdin : createReadStream(file)
 
         const input = source
   .pipe(streamStatsPrinter(length))
-  .pipe(new PassThrough())
+//  .pipe(new PassThrough())
 console.error({
   constructor: input.constructor.name,
   readableObjectMode: input.readableObjectMode,
