@@ -17,6 +17,7 @@ import pairs from 'lodash/toPairs.js'
 import pick from 'lodash/pick.js'
 import pw from 'pw'
 import XoLib from 'xo-lib'
+import { PassThrough, pipeline, Readable, Transform } from 'stream'
 
 // -------------------------------------------------------------------
 
@@ -659,10 +660,34 @@ async function call(args) {
         url = new URL(result[key], baseUrl)
 
         const length = file === '-' ? undefined : (await stat(file)).size
-        // const input = pipeline(file === '-' ? process.stdin : createReadStream(file), streamStatsPrinter(length), noop)
-        const source = file === '-' ? process.stdin : createReadStream(file)
-        const input = source.pipe(streamStatsPrinter(length))
-        input.pause()
+let total = 0
+
+const inspector = new Transform({
+  transform(chunk, encoding, callback) {
+    total += chunk.length
+
+    console.error(
+      'chunk:',
+      'type=' + chunk.constructor.name,
+      'Buffer=' + Buffer.isBuffer(chunk),
+      'length=' + chunk.length,
+      'total=' + total
+    )
+
+    callback(null, chunk)
+  },
+
+  flush(callback) {
+    console.error('TOTAL OUTPUT:', total, 'EXPECTED:', length)
+    callback()
+  },
+})
+
+const source = file === '-' ? process.stdin : createReadStream(file)
+
+const input = source
+  .pipe(streamStatsPrinter(length))
+  .pipe(inspector)
         const response = await fetch(url, {
           dispatcher,
           body: input,
