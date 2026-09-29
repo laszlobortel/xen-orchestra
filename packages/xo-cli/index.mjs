@@ -684,9 +684,9 @@ const inspector = new Transform({
 
 const source = file === '-' ? process.stdin : createReadStream(file)
 
-const input = source
+        const input = source
   .pipe(streamStatsPrinter(length))
-  .pipe(inspector)
+  .pipe(new PassThrough())
         const response = await fetch(url, {
           dispatcher,
           body: input,
