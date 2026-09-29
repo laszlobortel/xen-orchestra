@@ -687,7 +687,13 @@ const source = file === '-' ? process.stdin : createReadStream(file)
         const input = source
   .pipe(streamStatsPrinter(length))
   .pipe(new PassThrough())
-        const response = await fetch(url, {
+console.error({
+  constructor: input.constructor.name,
+  readableObjectMode: input.readableObjectMode,
+  readableHighWaterMark: input.readableHighWaterMark,
+  readableEncoding: input.readableEncoding,
+})
+  const response = await fetch(url, {
           dispatcher,
           body: input,
           duplex: 'half',
